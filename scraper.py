@@ -1,7 +1,5 @@
-import os
 import pandas as pd
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import WebDriverException
@@ -15,12 +13,9 @@ options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--disable-gpu')
 options.add_argument('--window-size=1920,1080')
 
-# Use CHROMEDRIVER_PATH from env
-chromedriver_path = os.environ.get('CHROMEDRIVER_PATH', 'chromedriver')
-
 try:
-    service = Service(chromedriver_path)
-    driver = webdriver.Chrome(service=service, options=options)
+    # Selenium will automatically find Chromedriver installed in PATH
+    driver = webdriver.Chrome(options=options)
 except WebDriverException as e:
     print(f"Failed to start Chrome WebDriver: {e}")
     exit(1)
@@ -38,7 +33,6 @@ for url in team_links:
     driver.get(url)
     time.sleep(4)
     try:
-        # Open the Players tab
         driver.find_element(By.XPATH, "//button[contains(.,'Players')]").click()
         time.sleep(2)
 
