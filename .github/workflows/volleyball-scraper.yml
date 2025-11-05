@@ -24,7 +24,6 @@ jobs:
 
       # 4. Set up Chrome + Chromedriver automatically
       - uses: browser-actions/setup-chrome@v2
-        id: setup-chrome
         with:
           chrome-version: '117'
           install-chromedriver: true
@@ -32,8 +31,6 @@ jobs:
 
       # 5. Run scraper
       - name: Run scraper
-        env:
-          CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
         run: python scraper.py
 
       # 6. Upload results
