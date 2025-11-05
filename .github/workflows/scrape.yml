@@ -2,8 +2,9 @@ name: Volleyball Scraper
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # Every day at midnight UTC
+    - cron: '0 * * * *'   # Runs at minute 0 of every hour, every day
   workflow_dispatch:
+
 
 jobs:
   scrape:
