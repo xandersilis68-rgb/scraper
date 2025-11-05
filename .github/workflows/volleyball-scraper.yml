@@ -18,29 +18,26 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 3. Install dependencies
+      # 3. Install Python dependencies
       - run: pip install --upgrade pip
       - run: pip install selenium pandas
 
-      # 4. Set up Chrome and Chromedriver (matching versions)
-      - uses: browser-actions/setup-chrome@v1
+      # 4. Set up Chrome + Chromedriver automatically
+      - uses: browser-actions/setup-chrome@v2
+        id: setup-chrome
         with:
           chrome-version: '117'
-
-      - uses: browser-actions/setup-chromedriver@v1
-        with:
-          chromedriver-version: '117'
+          install-chromedriver: true
+          install-dependencies: true
 
       # 5. Run scraper
       - name: Run scraper
         env:
-          CHROMEDRIVER_PATH: ${{ github.workspace }}/chromedriver
-        run: |
-          python scraper.py
+          CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
+        run: python scraper.py
 
       # 6. Upload results
-      - name: Upload results
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: volleyball_players_efficiency
           path: volleyball_players_efficiency.csv
