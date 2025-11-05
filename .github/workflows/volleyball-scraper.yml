@@ -10,28 +10,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout the repo
       - uses: actions/checkout@v4
 
-      - name: Install Chrome and dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip google-chrome-stable
-          pip install selenium pandas
+      # 2. Set up Python 3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-      - name: Download Chromedriver
-        run: |
-          wget https://chromedriver.storage.googleapis.com/117.0.5938.62/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          mv chromedriver linux_chromedriver
-          chmod +x linux_chromedriver
+      # 3. Install dependencies
+      - run: pip install --upgrade pip
+      - run: pip install selenium pandas
 
+      # 4. Set up Chrome and Chromedriver (matching versions)
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: '117'
+
+      - uses: browser-actions/setup-chromedriver@v1
+        with:
+          chromedriver-version: '117'
+
+      # 5. Run scraper
       - name: Run scraper
         env:
-          CHROMEDRIVER_PATH: ${{ github.workspace }}/linux_chromedriver
-          PATH: ${{ github.workspace }}:${{ env.PATH }}
+          CHROMEDRIVER_PATH: ${{ github.workspace }}/chromedriver
         run: |
           python scraper.py
 
+      # 6. Upload results
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
