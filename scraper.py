@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -11,7 +12,8 @@ options.add_argument('--disable-dev-shm-usage')
 options.add_argument('--disable-gpu')
 options.add_argument('--window-size=1920,1080')
 
-driver = webdriver.Chrome(options=options)
+chromedriver_path = os.environ.get('CHROMEDRIVER_PATH', 'chromedriver')
+driver = webdriver.Chrome(executable_path=chromedriver_path, options=options)
 driver.get("https://en.volleyballworld.com/beachvolleyball/competitions/beach-volleyball-world-championships/schedule/")
 time.sleep(5)
 
