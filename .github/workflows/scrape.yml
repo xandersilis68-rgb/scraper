@@ -2,7 +2,7 @@ name: "Beach Volleyball WC 2025 — scrape player efficiencies"
 
 on:
   schedule:
-    - cron: '0 * * * *'  # every hour
+    - cron: '0 * * * *'  # run every hour
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           persist-credentials: true
@@ -26,17 +26,15 @@ jobs:
           pip install pandas playwright
 
       - name: Install Playwright browsers
-        run: |
-          playwright install chromium
+        run: playwright install chromium
 
       - name: Run scraper
         run: python scrape.py
 
-      - name: Commit results
+      - name: Commit and push results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdir -p data
           git add data/
           git diff-index --quiet HEAD || git commit -m "Update player efficiencies $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           git push
