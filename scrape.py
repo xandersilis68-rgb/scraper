@@ -13,9 +13,9 @@ BASE_URL = 'https://en.volleyballworld.com/beachvolleyball/competitions/beach-vo
 OUTPUT_DIR = 'data'
 COLUMNS = ['player_id','name','serve','reception','attack','block','dig','timestamp']
 
-# Tournament dates (UTC)
-TOURNAMENT_START = dt(2025, 6, 1)   # adjust to actual start
-TOURNAMENT_END   = dt(2025, 6, 30)  # adjust to actual end
+# Tournament dates (UTC) — adjust to real 2025 WC dates
+TOURNAMENT_START = dt(2025, 6, 1)
+TOURNAMENT_END   = dt(2025, 6, 30)
 
 # Exit if tournament is not running
 now = dt.utcnow()
