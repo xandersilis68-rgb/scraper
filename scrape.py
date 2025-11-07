@@ -6,25 +6,11 @@ import os
 import json
 import time
 import random
-from datetime import datetime as dt
 
 # ---------------- CONFIG ----------------
 BASE_URL = 'https://en.volleyballworld.com/beachvolleyball/competitions/beach-volleyball-world-championships/players/'
 OUTPUT_DIR = 'data'
 COLUMNS = ['player_id','name','serve','reception','attack','block','dig','timestamp']
-
-# Tournament dates (UTC) — adjust to real 2025 WC dates
-TOURNAMENT_START = dt(2025, 6, 1)
-TOURNAMENT_END   = dt(2025, 6, 30)
-
-# Exit if tournament is not running
-now = dt.utcnow()
-if now < TOURNAMENT_START:
-    print(f"Tournament has not started yet ({now.date()} < {TOURNAMENT_START.date()}) → skipping scrape")
-    exit(0)
-if now > TOURNAMENT_END:
-    print(f"Tournament is over ({now.date()} > {TOURNAMENT_END.date()}) → skipping scrape")
-    exit(0)
 
 # --------------- HELPER ----------------
 def get_html(url, retries=5, delay=2):
@@ -128,6 +114,12 @@ def main():
     df.to_csv(f"{OUTPUT_DIR}/efficiencies_latest.csv", index=False)
     with open(f"{OUTPUT_DIR}/efficiencies_latest.json",'w', encoding='utf-8') as f:
         json.dump(data,f,indent=2)
+
+    # generate Markdown table for GitHub Pages
+    md_table = df.to_markdown(index=False)
+    with open(f"{OUTPUT_DIR}/efficiencies_latest.md",'w', encoding='utf-8') as f:
+        f.write("# Beach Volleyball WC 2025 — Player Efficiencies\n\n")
+        f.write(md_table)
 
 if __name__=='__main__':
     main()
